@@ -1,0 +1,25 @@
+# loading the image
+from PIL import Image
+import numpy as np
+image = np.asarray( Image.open("img.jpg") )
+import matplotlib.pyplot as plt
+
+# create new image of correct size
+m = len(image[0])
+n = len(image)
+factor = 3
+new_image = np.zeros((factor*(n-1) + 1,factor*(m-1) + 1,3), dtype=int)
+
+# implement row zooming
+for i in range(n):
+    row = image[i]
+    for k in range(len(row)-1):
+        new_image[i][k*factor], new_image[i][(k+1)*factor] = row[k], row[k+1]
+        for mode in range(3):
+            # need mode as three colour channels in RGB
+
+            lo = int(min(row[k][mode], row[k+1][mode]))
+            hi = int(max(row[k][mode], row[k+1][mode]))
+            diff = int((hi-lo)//factor)
+            for x in range(factor-1):
+                new_image[i][k*factor+1+x][mode
